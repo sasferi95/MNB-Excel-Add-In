@@ -103,6 +103,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -156,9 +158,23 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="MNBRibbon.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MNBRibbon.Designer.cs">
+      <DependentUpon>MNBRibbon.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Web References\hu.mnb.www\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="MNBRibbon.resx">
+      <DependentUpon>MNBRibbon.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -168,6 +184,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="app.config" />
+    <None Include="MNB-Excel-Add-In_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -175,6 +193,7 @@
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
@@ -186,10 +205,71 @@
       <DependentUpon>ThisAddIn.Designer.xml</DependentUpon>
     </Compile>
     <AppDesigner Include="Properties\" />
+    <None Include="Web References\hu.mnb.www\arfolyamok.wsdl" />
+    <None Include="Web References\hu.mnb.www\arfolyamok.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\hu.mnb.www\arfolyamok0.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\hu.mnb.www\GetCurrenciesResponseBody.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\hu.mnb.www\GetCurrencyUnitsResponseBody.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\hu.mnb.www\GetCurrentExchangeRatesResponseBody.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\hu.mnb.www\GetDateIntervalResponseBody.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\hu.mnb.www\GetExchangeRatesResponseBody.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\hu.mnb.www\GetInfoResponseBody.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\hu.mnb.www\MNBArfolyamServiceSoapImpl.wsdl" />
+    <None Include="Web References\hu.mnb.www\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="http://www.mnb.hu/arfolyamok.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\hu.mnb.www\</RelPath>
+      <UpdateFromURL>http://www.mnb.hu/arfolyamok.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>MNB_Excel_Add_In_hu_mnb_www_MNBArfolyamServiceSoapImpl</CachedSettingsPropName>
+    </WebReferenceUrl>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web References\hu.mnb.www\arfolyamok.disco" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>MNB-Excel-Add-In_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>FACA536D7302E555FF95F47201251F8637737C7A</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -201,7 +281,7 @@
       <FlavorProperties GUID="{BAA0C2D2-18E2-41B9-852F-F413020CAA33}">
         <ProjectProperties HostName="Excel" HostPackage="{29A7B9D7-A7F1-4328-8EF0-6B2D1A56B2C1}" OfficeVersion="15.0" VstxVersion="4.0" ApplicationType="Excel" Language="cs" TemplatesPath="" DebugInfoExeName="#Software\Microsoft\Office\16.0\Excel\InstallRoot\Path#excel.exe" DebugInfoCommandLine="/x" AddItemTemplatesGuid="{51063C3A-E220-4D12-8922-BDA915ACD783}" />
         <Host Name="Excel" GeneratedCodeNamespace="MNB_Excel_Add_In" IconIndex="0">
-          <HostItem Name="ThisAddIn" Code="ThisAddIn.cs" CanonicalName="ThisAddIn" CanActivate="false" IconIndex="1" Blueprint="ThisAddIn.Designer.xml" GeneratedCode="ThisAddIn.Designer.cs" />
+          <HostItem Name="ThisAddIn" Code="ThisAddIn.cs" CanonicalName="AddIn" CanActivate="false" IconIndex="1" Blueprint="ThisAddIn.Designer.xml" GeneratedCode="ThisAddIn.Designer.cs" />
         </Host>
       </FlavorProperties>
     </VisualStudio>
