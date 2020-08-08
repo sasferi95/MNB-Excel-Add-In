@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Results>
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://www.mnb.hu/arfolyamok.asmx?xsd=xsd1" filename="arfolyamok.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.DiscoveryDocumentReference" url="http://www.mnb.hu/arfolyamok.asmx?disco" filename="arfolyamok.disco" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="http://www.mnb.hu/arfolyamok.asmx?wsdl" filename="MNBArfolyamServiceSoapImpl.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="http://www.mnb.hu/arfolyamok.asmx?wsdl=wsdl0" filename="arfolyamok.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://www.mnb.hu/arfolyamok.asmx?xsd=xsd0" filename="arfolyamok0.xsd" />
+  </Results>
+</DiscoveryClientResultsFile>
