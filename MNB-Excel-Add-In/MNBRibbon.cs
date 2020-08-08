@@ -12,6 +12,8 @@ namespace MNB_Excel_Add_In
     public partial class MNBRibbon
     {
         List<string> currencies;
+        string startdate = "2020-03-01";
+        string enddate = "2020-03-31";
 
         string Currencies { 
             get{
@@ -28,8 +30,7 @@ namespace MNB_Excel_Add_In
         {
             currencies = GetCurrencyTypesFromWebservice();
             var currencyUnitDictionary = GetUnitForTypesFromWebservice(Currencies);
-
-
+            GetCurrencyRatesInInterval(startdate, enddate);
         }
 
         List<string> GetCurrencyTypesFromWebservice()
@@ -77,6 +78,44 @@ namespace MNB_Excel_Add_In
             }
 
             return currencyUnits;
+        }
+
+        //have to check if the date is valid
+        List<DailyExchangeRates> GetCurrencyRatesInInterval(string startdate,string enddate)
+        {
+            GetExchangeRatesResponseBody result;
+            using (MNBArfolyamServiceSoapImpl test = new MNBArfolyamServiceSoapImpl())
+            {
+                //<MNBExchangeRates><Day date="2020-04-01"><Rate unit="1" curr="EUR">364,57</Rate></Day></MNBExchangeRates>
+                var myExchangeratesRequestBody = new GetExchangeRatesRequestBody() { startDate = startdate, endDate = enddate, currencyNames = Currencies };
+                result = test.GetExchangeRates(myExchangeratesRequestBody);
+
+            }
+
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(result.GetExchangeRatesResult);
+            XmlNodeList xnList = xmlDocument.SelectNodes("/MNBExchangeRates/Day");
+            List<DailyExchangeRates> dailyRates = new List<DailyExchangeRates>();
+            foreach (XmlNode day in xnList)
+            {
+                List<CurrencyData> currencyData = new List<CurrencyData>();
+                var dayOfExchangeRate = day.Attributes["date"].Value;
+                var dailyCurrencyExchangeRates = day.SelectNodes("Rate");
+                foreach (XmlNode exchangeRates in dailyCurrencyExchangeRates)
+                {
+                    int unit = int.Parse(exchangeRates.Attributes["unit"].Value);
+                    string curr = exchangeRates.Attributes["curr"].Value;
+                    double value = double.Parse(exchangeRates.InnerText);
+                    currencyData.Add(new CurrencyData(unit, curr, value));
+                    //Console.WriteLine(exchangeRates.Attributes["curr"].Value + "\t" + exchangeRates.InnerText);
+                }
+                dailyRates.Add(new DailyExchangeRates(dayOfExchangeRate, currencyData));
+            }
+            foreach (var day in dailyRates)
+            {
+                Console.WriteLine(day.ToString());
+            }
+            return dailyRates;
         }
 
     }

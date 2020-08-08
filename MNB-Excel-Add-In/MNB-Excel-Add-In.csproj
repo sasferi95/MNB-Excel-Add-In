@@ -158,6 +158,8 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="CurrencyData.cs" />
+    <Compile Include="DailyExchangeRates.cs" />
     <Compile Include="MNBRibbon.cs">
       <SubType>Component</SubType>
     </Compile>
