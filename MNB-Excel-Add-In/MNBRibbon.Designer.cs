@@ -37,6 +37,7 @@
             this.tab1 = this.Factory.CreateRibbonTab();
             this.MNBGroup = this.Factory.CreateRibbonGroup();
             this.mnbDataBTN = this.Factory.CreateRibbonButton();
+            this.logBtn = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.MNBGroup.SuspendLayout();
             this.SuspendLayout();
@@ -51,6 +52,7 @@
             // MNBGroup
             // 
             this.MNBGroup.Items.Add(this.mnbDataBTN);
+            this.MNBGroup.Items.Add(this.logBtn);
             this.MNBGroup.Label = "Sas Ferenc";
             this.MNBGroup.Name = "MNBGroup";
             // 
@@ -59,6 +61,12 @@
             this.mnbDataBTN.Label = "MNB adatletöltés";
             this.mnbDataBTN.Name = "mnbDataBTN";
             this.mnbDataBTN.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.mnbDataBTN_Click);
+            // 
+            // logBtn
+            // 
+            this.logBtn.Label = "Log";
+            this.logBtn.Name = "logBtn";
+            this.logBtn.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.logBtn_Click);
             // 
             // MNBRibbon
             // 
@@ -79,6 +87,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonTab tab1;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup MNBGroup;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton mnbDataBTN;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton logBtn;
     }
 
     partial class ThisRibbonCollection

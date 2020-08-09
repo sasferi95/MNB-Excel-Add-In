@@ -166,5 +166,14 @@ namespace MNB_Excel_Add_In
             return dict;
         }
 
+        private void logBtn_Click(object sender, RibbonControlEventArgs e)
+        {
+            string username = GetUser();
+        }
+
+        private string GetUser()
+        {
+            return System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+        }
     }
 }
