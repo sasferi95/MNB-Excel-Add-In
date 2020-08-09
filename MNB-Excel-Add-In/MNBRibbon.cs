@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.OleDb;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -170,11 +172,29 @@ namespace MNB_Excel_Add_In
         {
             string username = GetUser();
             var timestamp = DateTime.Now;
+            GetAllLog();
         }
 
         private string GetUser()
         {
             return System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+        }
+
+        DataTable GetAllLog()
+        {
+            DataTable results = new DataTable();
+            using (OleDbConnection myConn = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\Feri\source\repos\MNB-Excel-Add-In\MNB-Excel-Add-In\Resources\ExcelButton.accdb"))
+            {
+                myConn.Open();
+                
+                OleDbCommand mySelectCommand = new OleDbCommand("select DomainUsername, Timestamp, Comment from MNBButtonLogs", myConn);
+
+                OleDbDataAdapter adapter = new OleDbDataAdapter(mySelectCommand);
+
+                adapter.Fill(results);
+            }
+
+            return results;
         }
     }
 }
