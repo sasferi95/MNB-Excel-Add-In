@@ -145,7 +145,8 @@ namespace MNB_Excel_Add_In
 
         void InsertExcelCurrencyRatesWithDates(List<DailyExchangeRates> dailyExchangeRates, Dictionary<string, int> currencyForColumn, Dictionary<string, int> dateForRow)
         {
-            foreach (var daylyRates in dailyExchangeRates)
+            List<DailyExchangeRates> orderedDailyExchangeRates=dailyExchangeRates.OrderBy(x => x.DateOfExchangeRate).ToList();
+            foreach (var daylyRates in orderedDailyExchangeRates)
             {
                 int row = dateForRow[daylyRates.DateOfExchangeRate];
                 Globals.ThisAddIn.Application.ActiveSheet.Cells[row, 1].Value2 = daylyRates.DateOfExchangeRate;
@@ -153,6 +154,7 @@ namespace MNB_Excel_Add_In
                 {
                     int col = currencyForColumn[cd.Currency];
                     Globals.ThisAddIn.Application.ActiveSheet.Cells[row, col].Value2 = cd.Rate;
+                    Globals.ThisAddIn.Application.ActiveSheet.Cells[row, col].NumberFormat = "0,00";
                 }
             }
         }
