@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using System.Xml;
 using Microsoft.Office.Tools.Ribbon;
 using MNB_Excel_Add_In.hu.mnb.www;
@@ -29,8 +30,18 @@ namespace MNB_Excel_Add_In
         private void mnbDataBTN_Click(object sender, RibbonControlEventArgs e)
         {
             currencies = GetCurrencyTypesFromWebservice();
+            
+            //dictionary for currency and its unit
             var currencyUnitDictionary = GetUnitForTypesFromWebservice(Currencies);
-            GetCurrencyRatesInInterval(startdate, enddate);
+            //get exchange rates in a given timespan
+            var dailyExchangeRates = GetCurrencyRatesInInterval(startdate, enddate);
+
+            var offsetDatesRow = OffsetDictionaryMaker(dailyExchangeRates.Select(x => x.DateOfExchangeRate).ToList(),3);
+            var offsetCurrencyColumn = OffsetDictionaryMaker(currencies, 2);
+
+
+            InsertExcelCurrencyHeader(currencyUnitDictionary,offsetCurrencyColumn);
+            InsertExcelCurrencyRates(dailyExchangeRates, offsetCurrencyColumn, offsetDatesRow);
         }
 
         List<string> GetCurrencyTypesFromWebservice()
@@ -116,6 +127,40 @@ namespace MNB_Excel_Add_In
                 Console.WriteLine(day.ToString());
             }
             return dailyRates;
+        }
+
+        void InsertExcelCurrencyHeader(Dictionary<string,int> currencyUnits,Dictionary<string, int> offsetCurrencyColumn)
+        {
+            Globals.ThisAddIn.Application.ActiveSheet.Cells[1, 1].Value2 = "Dátum/ISO";
+            Globals.ThisAddIn.Application.ActiveSheet.Cells[2, 1].Value2 = "Egység";
+
+            foreach(KeyValuePair<string, int> keyValuePair in currencyUnits)
+            {
+                string curCurrency = keyValuePair.Key;
+                int column = offsetCurrencyColumn[curCurrency];
+                Globals.ThisAddIn.Application.ActiveSheet.Cells[1, column].Value2 = keyValuePair.Key;
+                Globals.ThisAddIn.Application.ActiveSheet.Cells[2, column].Value2 = keyValuePair.Value;
+            }
+        }
+
+        void InsertExcelCurrencyRates(List<DailyExchangeRates> dailyExchangeRates, Dictionary<string, int> currencyForColumn, Dictionary<string, int> dateForRow)
+        {
+            foreach (var daylyRates in dailyExchangeRates)
+            {
+                int row = dateForRow[daylyRates.DateOfExchangeRate];
+                foreach (CurrencyData cd in daylyRates.CurrencyDatas)
+                {
+                    int col = currencyForColumn[cd.Currency];
+                    Globals.ThisAddIn.Application.ActiveSheet.Cells[row, col].Value2 = cd.Rate;
+                }
+            }
+        }
+
+        Dictionary<string, int> OffsetDictionaryMaker(List<string> list, int start = 0)
+        {
+            Dictionary<string, int> dict = new Dictionary<string, int>();
+            list.ForEach(x => dict.Add(x, start++));
+            return dict;
         }
 
     }
