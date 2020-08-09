@@ -41,7 +41,7 @@ namespace MNB_Excel_Add_In
 
 
             InsertExcelCurrencyHeader(currencyUnitDictionary,offsetCurrencyColumn);
-            InsertExcelCurrencyRates(dailyExchangeRates, offsetCurrencyColumn, offsetDatesRow);
+            InsertExcelCurrencyRatesWithDates(dailyExchangeRates, offsetCurrencyColumn, offsetDatesRow);
         }
 
         List<string> GetCurrencyTypesFromWebservice()
@@ -143,11 +143,12 @@ namespace MNB_Excel_Add_In
             }
         }
 
-        void InsertExcelCurrencyRates(List<DailyExchangeRates> dailyExchangeRates, Dictionary<string, int> currencyForColumn, Dictionary<string, int> dateForRow)
+        void InsertExcelCurrencyRatesWithDates(List<DailyExchangeRates> dailyExchangeRates, Dictionary<string, int> currencyForColumn, Dictionary<string, int> dateForRow)
         {
             foreach (var daylyRates in dailyExchangeRates)
             {
                 int row = dateForRow[daylyRates.DateOfExchangeRate];
+                Globals.ThisAddIn.Application.ActiveSheet.Cells[row, 1].Value2 = daylyRates.DateOfExchangeRate;
                 foreach (CurrencyData cd in daylyRates.CurrencyDatas)
                 {
                     int col = currencyForColumn[cd.Currency];
