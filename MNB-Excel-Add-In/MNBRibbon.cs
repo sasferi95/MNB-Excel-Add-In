@@ -169,6 +169,7 @@ namespace MNB_Excel_Add_In
         private void logBtn_Click(object sender, RibbonControlEventArgs e)
         {
             string username = GetUser();
+            var timestamp = DateTime.Now;
         }
 
         private string GetUser()
