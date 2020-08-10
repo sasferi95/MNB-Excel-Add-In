@@ -32,5 +32,16 @@ namespace MNB_Excel_Add_In.Properties {
                 return ((string)(this["MNB_Excel_Add_In_hu_mnb_www_MNBArfolyamServiceSoapImpl"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=|DataDirectory|\\Resources\\ExcelButt" +
+            "on.accdb")]
+        public string ExcelButtonConnectionString {
+            get {
+                return ((string)(this["ExcelButtonConnectionString"]));
+            }
+        }
     }
 }
