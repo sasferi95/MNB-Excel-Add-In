@@ -190,10 +190,9 @@ namespace MNB_Excel_Add_In
             DataTable results = new DataTable();
             using (OleDbConnection myConn = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\Feri\source\repos\MNB-Excel-Add-In\MNB-Excel-Add-In\Resources\ExcelButton.accdb"))
             {
-                myConn.Open();
-                
                 OleDbCommand mySelectCommand = new OleDbCommand("SELECT DomainUsername, Timestamp, Comment FROM MNBButtonLogs", myConn);
 
+                myConn.Open();
                 OleDbDataAdapter adapter = new OleDbDataAdapter(mySelectCommand);
 
                 adapter.Fill(results);
@@ -206,20 +205,25 @@ namespace MNB_Excel_Add_In
         void InsertNewLog(string username, DateTime logTime)
         {
             using (OleDbConnection myConn = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\Feri\source\repos\MNB-Excel-Add-In\MNB-Excel-Add-In\Resources\ExcelButton.accdb"))
-            {
-                myConn.Open();
+            {                
+                string query = "INSERT INTO MNBButtonLogs ([DomainUsername], [Timestamp]) " +
+                               "VALUES (@username, @timestamp)";
 
-                OleDbCommand mySelectCommand = new OleDbCommand("INSERT INTO MNBButtonLogs ([DomainUsername], [Timestamp]) " +
-                                                                "VALUES (@username, @timestamp)", myConn);
+                OleDbCommand mySelectCommand = new OleDbCommand(query, myConn);
+
                 mySelectCommand.Parameters.AddWithValue("@username", username);
                 mySelectCommand.Parameters.AddWithValue("@timestamp", logTime.ToString("yyyy-MM-dd HH:mm:ss"));
 
-                int affectedRows = mySelectCommand.ExecuteNonQuery();
-                if (affectedRows == 0)
+                try
                 {
-                    //
-                }
+                    myConn.Open();
 
+                    mySelectCommand.ExecuteNonQuery();
+                }
+                catch(Exception e)
+                {
+                    MessageBox.Show(e.Message,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                }
             }
 
 
