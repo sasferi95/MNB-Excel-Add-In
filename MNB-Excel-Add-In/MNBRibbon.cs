@@ -7,8 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using Microsoft.Office.Interop.Excel;
 using Microsoft.Office.Tools.Ribbon;
 using MNB_Excel_Add_In.hu.mnb.www;
+using DataTable = System.Data.DataTable;
 
 namespace MNB_Excel_Add_In
 {
@@ -44,6 +46,8 @@ namespace MNB_Excel_Add_In
 
             InsertExcelCurrencyHeader(currencyUnitDictionary,offsetCurrencyColumn);
             InsertExcelCurrencyRatesWithDates(dailyExchangeRates, offsetCurrencyColumn, offsetDatesRow);
+
+            InsertNewLog("test",DateTime.Now);
         }
 
         List<string> GetCurrencyTypesFromWebservice()
@@ -172,7 +176,8 @@ namespace MNB_Excel_Add_In
         {
             string username = GetUser();
             var timestamp = DateTime.Now;
-            GetAllLog();
+            DataTable allLog = GetAllLog();
+
         }
 
         private string GetUser()
@@ -187,7 +192,7 @@ namespace MNB_Excel_Add_In
             {
                 myConn.Open();
                 
-                OleDbCommand mySelectCommand = new OleDbCommand("select DomainUsername, Timestamp, Comment from MNBButtonLogs", myConn);
+                OleDbCommand mySelectCommand = new OleDbCommand("SELECT DomainUsername, Timestamp, Comment FROM MNBButtonLogs", myConn);
 
                 OleDbDataAdapter adapter = new OleDbDataAdapter(mySelectCommand);
 
@@ -195,6 +200,29 @@ namespace MNB_Excel_Add_In
             }
 
             return results;
+        }
+
+        //raise error
+        void InsertNewLog(string username, DateTime logTime)
+        {
+            using (OleDbConnection myConn = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\Feri\source\repos\MNB-Excel-Add-In\MNB-Excel-Add-In\Resources\ExcelButton.accdb"))
+            {
+                myConn.Open();
+
+                OleDbCommand mySelectCommand = new OleDbCommand("INSERT INTO MNBButtonLogs ([DomainUsername], [Timestamp]) " +
+                                                                "VALUES (@username, @timestamp)", myConn);
+                mySelectCommand.Parameters.AddWithValue("@username", username);
+                mySelectCommand.Parameters.AddWithValue("@timestamp", logTime.ToString("yyyy-MM-dd HH:mm:ss"));
+
+                int affectedRows = mySelectCommand.ExecuteNonQuery();
+                if (affectedRows == 0)
+                {
+                    //
+                }
+
+            }
+
+
         }
     }
 }
